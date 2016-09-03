@@ -109,4 +109,60 @@ public class LoneTest extends BaseNd4jTest {
         //this was throwing an exception
         INDArray c = Nd4j.tensorMmul(b, a, axes);
     }
+
+    @Test
+    public void perfSetTransform() {
+        INDArray a,b,c,bb;
+        long startTime;
+
+        //a = Nd4j.zeros(1000, 1000, 100).permutei(0, 2, 1);
+        a = Nd4j.rand(new int[] {10,10000,10});
+        b = Nd4j.rand(new int[] {100,100,100});
+        bb = Nd4j.rand(new int[] {100,100,100});
+        c = Nd4j.rand(new int[] {100,100,100});
+        System.out.println("Initialized arrays.........");
+
+        /*
+        startTime = System.nanoTime();
+        b = a.permute(0,2,1);
+        System.out.println(String.format("a permute to b: %.3f s", (System.nanoTime() - startTime) / 1000000000.));
+        */
+
+
+        System.out.println("============================");
+        System.out.println("a shape:"+a.shapeInfoToString());
+        System.out.println("b shape:"+b.shapeInfoToString());
+        startTime = System.nanoTime();
+        b = a.dup();
+        System.out.println(String.format("a dup to b time: %.3f s", (System.nanoTime() - startTime) / 1000000000.));
+        System.out.println("a shape:"+a.shapeInfoToString());
+        System.out.println("b shape:"+b.shapeInfoToString());
+        System.out.println("============================");
+
+        System.out.println("============================");
+        startTime = System.nanoTime();
+        bb.assign(a);
+        System.out.println(String.format("a assign to bb time: %.3f s", (System.nanoTime() - startTime) / 1000000000.));
+        System.out.println("============================");
+
+        System.out.println("============================");
+        startTime = System.nanoTime();
+        c = a.dup();
+        System.out.println(String.format("a dup to c time: %.3f s", (System.nanoTime() - startTime) / 1000000000.));
+        System.out.println("============================");
+
+        /*
+        int[] newShape = new int[]{50, 200, 100};
+        startTime = System.nanoTime();
+        b.reshape(newShape);
+        System.out.println(String.format("b Reshape: %.3f s", (System.nanoTime() - startTime) / 1000000000.));
+
+        startTime = System.nanoTime();
+        b = a.dup();
+        System.out.println(String.format("a dup to b: %.3f s", (System.nanoTime() - startTime) / 1000000000.));
+        startTime = System.nanoTime();
+        b.reshape(newShape);
+        System.out.println(String.format("b Reshape: %.3f s", (System.nanoTime() - startTime) / 1000000000.));
+        */
+    }
 }
