@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.bytedeco.javacpp.IntPointer;
 
 /**
  * @author raver119@gmail.com
@@ -64,7 +65,7 @@ public class CpuTADManager implements TADManager {
                 Pointer targetPointer = outputBuffer.addressPointer();
                 Pointer offsetsPointer = offsetsBuffer.addressPointer();
 
-                nativeOps.tadOnlyShapeInfo(xShapeInfo, dimensionPointer, dimension.length, targetPointer, offsetsPointer);
+                nativeOps.tadOnlyShapeInfo(xShapeInfo, (IntPointer)dimensionPointer, dimension.length, targetPointer, offsetsPointer);
 
                 Pair<DataBuffer, DataBuffer> pair = new Pair<DataBuffer, DataBuffer>(outputBuffer, offsetsBuffer);
                 cache.put(descriptor, pair);
